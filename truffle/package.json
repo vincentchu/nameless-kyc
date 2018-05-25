@@ -1,0 +1,23 @@
+{
+  "name": "crypto-march-madness",
+  "version": "1.0.0",
+  "description": "Smart contract for crypto-march-madness",
+  "scripts": {
+    "init": "$(npm bin)/truffle init",
+    "compile": "$(npm bin)/truffle compile",
+    "start": "$(npm bin)/ganache-cli --mnemonic='color coral ozone benefit purse model consider warrior soap host result symptom'",
+    "test": "$(npm bin)/truffle test",
+    "migrate": "$(npm bin)/truffle migrate"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "eslint": "^4.19.1",
+    "eslint-plugin-import": "^2.12.0",
+    "eslint-config-esnext": "^2.0.0",
+    "ganache-cli": "^6.1.0",
+    "truffle": "^4.1.11",
+    "big.js": "^5.1.2"
+  },
+  "author": "Vincent Chu",
+  "license": "MIT"
+}

@@ -1,0 +1,17 @@
+node_modules/
+build/
+private-keys.json
+.env
+.vscode/
+
+server/.bundle
+
+# Ignore all logfiles and tempfiles.
+server/log/*
+server/tmp/*
+server/log/.keep
+server/tmp/.keep
+
+# Ignore Byebug command history file.
+server/.byebug_history
+dump.rdb
