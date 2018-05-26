@@ -11,7 +11,6 @@ const bloomFn = (addr) => {
   let state = _web3.utils.toBN(0)
   const addrHash = keccak256(addr)
   const addrBn = _web3.utils.toBN(addrHash)
-  console.log('ADDR:', addrBn.toString(2), addrBn.toString())
 
   for (let k = 0; k < K; k++) {
     const bitPos = addrBn.shrn(k * M).and(Mask).mod(_web3.utils.toBN(M)).toNumber(10)
