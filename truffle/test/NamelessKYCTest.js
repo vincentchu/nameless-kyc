@@ -23,8 +23,12 @@ contract('NamelessKYC', () => {
       return args
     })
 
+    const addrHash = keccak256(addr)
+    const addrBn = web3.toBigNumber(addrHash)
+
     assert.deepEqual(evtArgs.addr, addr)
-    assert.deepEqual(evtArgs.keccakHash, keccak256(addr))
+    assert.deepEqual(evtArgs.keccakHash, addrHash)
+    assert.deepEqual(evtArgs.number.toString(16), addrBn.toString(16))
   })
 
   it('should allow bloomState to be updated', async () => {
