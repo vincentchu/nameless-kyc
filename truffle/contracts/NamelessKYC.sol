@@ -13,9 +13,7 @@ contract NamelessKYC {
         bloomState = newBloomState;
     }
 
-    function isPermitted(address addr) public view returns (bool _isPermitted) {
-        _isPermitted = false;
-
+    function isPermitted(address addr) public view returns (bool) {
         uint32 state = 0;
         bytes32 addrHash = keccak256(abi.encodePacked(addr));
         uint256 addrBn = uint256(addrHash);

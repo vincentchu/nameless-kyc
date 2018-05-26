@@ -32,7 +32,17 @@ const bloomStateFor = (addrs) => {
   return bloomBn
 }
 
+const displayBloomState = (bloomState) => {
+  const bloomStateStr = bloomState.toString(2)
+
+  const x =  _web3.utils.padLeft(bloomStateStr, M - bloomStateStr.length)
+
+  consle
+}
+
 module.exports = {
   keccak256,
   bloomStateFor,
+  bloomFn,
+  displayBloomState,
 }
