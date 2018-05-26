@@ -1,5 +1,5 @@
 const NamelessKYC = artifacts.require('./NamelessKYC.sol')
-const { keccak256 } = require('../utils/bloom')
+const { keccak256, bloomStateFor } = require('../utils/bloom')
 
 const Addresses = [
   '0x4e4e5b3585d8ed9a3954389b85574800260a04cf',
@@ -22,17 +22,35 @@ contract('NamelessKYC', () => {
 
       return args
     })
-    console.log('ff', evtArgs)
 
     assert.deepEqual(evtArgs.addr, addr)
     assert.deepEqual(evtArgs.keccakHash, keccak256(addr))
   })
 
-  // it('should allow bloomState to be updated', async () => {
-  //   console.log('hi')
-  //   const contract = await NamelessKYC.deployed()
-  //   await contract.testHash().then((x) => {
-  //     console.log(x.logs[0].args)
-  //   })
-  // })
+  it('should allow bloomState to be updated', async () => {
+    const contract = await NamelessKYC.deployed()
+
+    await contract.updateBloomState(999)
+    const bloomState = await contract.bloomState()
+
+    assert.equal(999, bloomState)
+  })
+
+  it('should kyc allowed addresses', async () => {
+    const contract = await NamelessKYC.deployed()
+    const bloomState = web3.toBigNumber(bloomStateFor(Addresses).toString())
+    await contract.updateBloomState(bloomState)
+
+    Addresses.forEach(async (addr) => {
+      const isPermitted = await contract.isPermitted(addr)
+      assert(isPermitted, `Address: ${addr} was not permitted, but should have been`)
+    })
+  })
+
+  it('should forbid non-KYCed addresses', async () => {
+    const contract = await NamelessKYC.deployed()
+    const isPermitted = await contract.isPermitted('0x59863C940e11F63550bb338F01c1E78EAa5698a7')
+
+    assert(!isPermitted, `Address: ${addr} was permitted, should not have been`)
+  })
 })

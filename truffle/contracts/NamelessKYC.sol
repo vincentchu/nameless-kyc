@@ -5,6 +5,15 @@ contract NamelessKYC {
 
     uint32 public bloomState;
 
+    function updateBloomState(uint32 newBloomState) public {
+        bloomState = newBloomState;
+    }
+
+    function isPermitted(address addr) public view returns (bool _isPermitted) {
+        _isPermitted = true;
+        return _isPermitted;
+    }
+
     function testBloomState(address addr) public {
         bytes32 keccakHash = keccak256(abi.encodePacked(addr));
 
