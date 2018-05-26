@@ -38,7 +38,9 @@ contract('NamelessKYC', () => {
 
   it('should kyc allowed addresses', async () => {
     const contract = await NamelessKYC.deployed()
+    console.log('***************')
     const bloomState = web3.toBigNumber(bloomStateFor(Addresses).toString())
+    console.log('***************')
     await contract.updateBloomState(bloomState)
 
     Addresses.forEach(async (addr) => {
