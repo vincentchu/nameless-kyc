@@ -49,7 +49,8 @@ contract('NamelessKYC', () => {
 
   it('should forbid non-KYCed addresses', async () => {
     const contract = await NamelessKYC.deployed()
-    const isPermitted = await contract.isPermitted('0x59863C940e11F63550bb338F01c1E78EAa5698a7')
+    const addr = '0x59863C940e11F63550bb338F01c1E78EAa5698a7'
+    const isPermitted = await contract.isPermitted(addr)
 
     assert(!isPermitted, `Address: ${addr} was permitted, should not have been`)
   })
