@@ -12,6 +12,18 @@ contract NamelessKYC {
         }
     }
 
+    function isMember(address addr) public view returns (bool) {
+        uint32[4] memory positions = bitPositions(addr);
+
+        for (uint8 k; k < 4; k++) {
+            if (!bloomFilter[positions[k]]) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     function addressHashes(address addr) public pure returns (bytes32[4] hashes) {
         hashes[0] = keccak256(abi.encodePacked(addr));
 

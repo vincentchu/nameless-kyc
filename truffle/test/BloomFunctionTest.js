@@ -38,4 +38,11 @@ contract('NamelessKYC - Bloom functions', () => {
       assert(isFlipped, `Position ${pos} was not flipped`)
     })
   })
+
+  it('should properly check presence of an address', async () => {
+    const contract = await NamelessKYC.deployed()
+    const isMember = await contract.isMember(Address)
+
+    assert(isMember, `Address ${Address} was not found!`)
+  })
 })
