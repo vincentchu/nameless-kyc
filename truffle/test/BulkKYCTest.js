@@ -33,7 +33,6 @@ const countTrue = (outcomes) => {
 const genAddrs = (n) => Array(n).fill(0).map(randAddr)
 
 contract('NamelessKYC - Bulk KYC', () => {
-  return
   const kycedAddrs = genAddrs(NumAddrs)
   const unKycedAddrs = genAddrs(NumAddrs)
 
