@@ -1,11 +1,16 @@
 pragma solidity ^0.4.23;
 
 contract NamelessKYC {
-    uint32 public N = 10;
-    uint256[10] public bloomState;
-    uint32 constant public NHashes = 4;
-
     uint32 private Mask = 2**32-1;
+    mapping(uint32 => bool) public bloomFilter;
+
+    function add(address addr) public {
+        uint32[4] memory positions = bitPositions(addr);
+
+        for (uint8 k = 0; k < 4; k++) {
+            bloomFilter[positions[k]] = true;
+        }
+    }
 
     function addressHashes(address addr) public pure returns (bytes32[4] hashes) {
         hashes[0] = keccak256(abi.encodePacked(addr));

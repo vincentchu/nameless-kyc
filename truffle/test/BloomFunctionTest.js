@@ -27,4 +27,15 @@ contract('NamelessKYC - Bloom functions', () => {
 
     assert.deepEqual(bitIdxs.map(toHex), bitPositions(Address).map(toHex))
   })
+
+  it('should properly add an address', async () => {
+    const contract = await NamelessKYC.deployed()
+    await contract.add(Address)
+
+    bitPositions(Address).map(async (pos) => {
+      const isFlipped = await contract.bloomFilter('0x' + toHex(pos))
+
+      assert(isFlipped, `Position ${pos} was not flipped`)
+    })
+  })
 })
