@@ -32,22 +32,17 @@ const countTrue = (outcomes) => {
 const genAddrs = (n) => Array(n).fill(0).map(randAddr)
 
 contract('NamelessKYC - Bulk KYC', () => {
-  return
   const kycedAddrs = genAddrs(NumAddrs)
   const unKycedAddrs = genAddrs(NumAddrs)
-  const bloomState = web3.toBigNumber(bloomStateFor(kycedAddrs).toString())
 
-  it('should update bloomState', async () => {
+  it('should successfully add all addresses', async () => {
     const contract = await NamelessKYC.deployed()
-    await contract.updateBloomState(bloomState)
-    const updatedState = await contract.bloomState()
-
-    assert.deepEqual(updatedState, bloomState)
+    await Promise.all(kycedAddrs.map((addr) => contract.add(addr)))
   })
 
   it('should have true positives', async () => {
     const contract = await NamelessKYC.deployed()
-    const outcomes = await Promise.all(kycedAddrs.map((addr) => contract.isPermitted(addr)))
+    const outcomes = await Promise.all(kycedAddrs.map((addr) => contract.isMember(addr)))
     const nTrue = countTrue(outcomes)
 
     assert(nTrue === NumAddrs, 'Unexpected false negative')
@@ -55,19 +50,9 @@ contract('NamelessKYC - Bulk KYC', () => {
 
   it('should not have any false positives', async () => {
     const contract = await NamelessKYC.deployed()
-
-    console.log(bloomState.toString(2))
-    const outcomes = await Promise.all(unKycedAddrs.map((addr) => {
-      const bl = bloomFn(addr)
-
-
-      console.log(addr, displayBloomState(bl))
-
-      return contract.isPermitted(addr)
-    }))
+    const outcomes = await Promise.all(unKycedAddrs.map((addr) => contract.isMember(addr)))
     const nTrue = countTrue(outcomes)
-    console.log(nTrue, outcomes)
 
-    // assert(nTrue === 0, 'Unexpected false positive')
+    assert(nTrue === 0, 'Unexpected false positive')
   })
 })
