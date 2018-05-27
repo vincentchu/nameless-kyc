@@ -1,5 +1,5 @@
 const NamelessKYC = artifacts.require('./NamelessKYC.sol')
-const { bloomStateFor, bloomFn, displayBloomState, bitPositions } = require('../utils/bloom')
+const { bitPositions } = require('../utils/bloom')
 
 const NumAddrs = 100
 const GroupSize = 50
