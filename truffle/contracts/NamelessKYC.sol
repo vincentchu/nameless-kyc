@@ -3,7 +3,9 @@ pragma solidity ^0.4.23;
 contract NamelessKYC {
     uint32 public N = 10;
     uint256[10] public bloomState;
-    uint32 public NHashes = 4;
+    uint32 constant public NHashes = 4;
+
+    uint32 private Mask = 2**32-1;
 
     function addressHashes(address addr) public pure returns (bytes32[4] hashes) {
         hashes[0] = keccak256(abi.encodePacked(addr));
@@ -13,6 +15,13 @@ contract NamelessKYC {
         }
 
         return hashes;
+    }
+
+    function bitPosition(bytes32 hash) public view returns (uint32 pos) {
+        uint256 num = uint256(hash);
+        pos = uint32(num & Mask);
+
+        return pos;
     }
 
 

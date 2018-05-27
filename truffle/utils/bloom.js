@@ -53,6 +53,14 @@ const addressHashes = (addr) => {
   return hashes
 }
 
+const BitMask = _web3.utils.toBN('0xffffffff')
+
+const bitPosition = (hash) => {
+  const num = _web3.utils.toBN(hash)
+
+  return num.and(BitMask)
+}
+
 
 
 
@@ -61,5 +69,7 @@ module.exports = {
   bloomStateFor,
   bloomFn,
   displayBloomState,
+
   addressHashes,
+  bitPosition,
 }
