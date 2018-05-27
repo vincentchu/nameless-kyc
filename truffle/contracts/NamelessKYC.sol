@@ -12,6 +12,12 @@ contract NamelessKYC {
         }
     }
 
+    function madd(uint32[] positions) public {
+        for (uint32 k = 0; k < positions.length; k++) {
+            bloomFilter[positions[k]] = true;
+        }
+    }
+
     function isMember(address addr) public view returns (bool) {
         uint32[4] memory positions = bitPositions(addr);
 

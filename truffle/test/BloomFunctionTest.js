@@ -3,7 +3,13 @@ const { addressHashes, keccak256, bitPosition, bitPositions } = require('../util
 
 const Address = '0x4e4e5b3585d8ed9a3954389b85574800260a04cf'
 
+const BulkAddresses = [
+  '0x4e4e5b3585d8ed9a3954389b85574800260a04cf',
+  '0xed33763cb19622abeec69f1bd2c7579dd0b0fe34',
+]
+
 const toHex = (n) => n.toString(16)
+const toEthHex = (n) => '0x' + toHex(n)
 
 contract('NamelessKYC - Bloom functions', () => {
   it('should properly hash', async () => {
@@ -33,7 +39,7 @@ contract('NamelessKYC - Bloom functions', () => {
     await contract.add(Address)
 
     bitPositions(Address).map(async (pos) => {
-      const isFlipped = await contract.bloomFilter('0x' + toHex(pos))
+      const isFlipped = await contract.bloomFilter(toEthHex(pos))
 
       assert(isFlipped, `Position ${pos} was not flipped`)
     })
@@ -52,5 +58,24 @@ contract('NamelessKYC - Bloom functions', () => {
     const isMember = await contract.isMember(missingAddr)
 
     assert(!isMember, `Address ${missingAddr} was not found!`)
+  })
+
+  it('should allow bulk addresses to be added directly', async () => {
+    const contract = await NamelessKYC.deployed()
+    const positions = []
+    BulkAddresses.forEach((addr) => {
+      bitPositions(addr).forEach((pos) => positions.push(toEthHex(pos)))
+    })
+
+
+    await contract.madd(positions)
+  })
+
+  it('should appropriately track bulk-added addresses', async () => {
+    const contract = await NamelessKYC.deployed()
+
+    const outcomes = await Promise.all(BulkAddresses.map((addr) => contract.isMember(addr)))
+
+    outcomes.forEach((outcome) => assert(outcome, 'Address not tracked properly'))
   })
 })

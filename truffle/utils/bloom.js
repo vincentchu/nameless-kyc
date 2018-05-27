@@ -67,15 +67,13 @@ const bitPositions = (addr) => {
   return hashes.map(bitPosition)
 }
 
-
-
-
 module.exports = {
-  keccak256,
   bloomStateFor,
   bloomFn,
   displayBloomState,
 
+  // New stuff
+  keccak256,
   addressHashes,
   bitPosition,
   bitPositions,
