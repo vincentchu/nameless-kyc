@@ -37,12 +37,29 @@ const displayBloomState = (bloomState) => {
 
   const x =  _web3.utils.padLeft(bloomStateStr, M - bloomStateStr.length)
 
-  consle
 }
+
+const NHashes = 4
+
+const addressHashes = (addr) => {
+  hashes = Array(NHashes)
+
+  hashes[0] = keccak256(addr.toLowerCase())
+
+  for (let k = 1; k < NHashes; k++) {
+    hashes[k] = keccak256(hashes[k-1])
+  }
+
+  return hashes
+}
+
+
+
 
 module.exports = {
   keccak256,
   bloomStateFor,
   bloomFn,
   displayBloomState,
+  addressHashes,
 }
