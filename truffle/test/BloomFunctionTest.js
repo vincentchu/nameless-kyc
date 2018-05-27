@@ -45,4 +45,12 @@ contract('NamelessKYC - Bloom functions', () => {
 
     assert(isMember, `Address ${Address} was not found!`)
   })
+
+  it('should properly check presence of an address that does not exist', async () => {
+    const contract = await NamelessKYC.deployed()
+    const missingAddr = '0xa49760620489677e09dfc9c7d3562dc54afa4beb'
+    const isMember = await contract.isMember(missingAddr)
+
+    assert(!isMember, `Address ${missingAddr} was not found!`)
+  })
 })
