@@ -22,6 +22,16 @@ Our sample implementation, [`NamelessKYC`](https://github.com/vincentchu/nameles
  - `madd(uint32[] positions)`: Add multiple addresses to the whitelist by manipulating the underlying Bloom filter directly. Member addresses are anonymized.
  - `transferAllowed(address _from, address _to, uint256)`: Enforces the rule that both parties involved in a transfer of tokens must be whitelisted in the TPL.
 
+## Security
+
+The primary drawback of Bloom filters is that they can potentially lead to false positives. In our particular case, that could potentially mean that addresses could participate in transfers without actually being approved. However, the likelihood of false positives can be made to be whatever the implementer needs, by controller _`m`_ and _`k`_ (In our particular implementation, _`m = 2^32`_ and _`k = 4`_; for 7500 addresses, the probability of a false positive was estimated to be roughly 2.4e-21).
+
+In practice, this issue is unlikely to present practical problems. For this specific case, it is theoretically possible for an attacker to find addresses that are "approved" when they should not be (i.e., a falsely-positive whitelist member). However, simply knowing such an address would not allow an attacker to obtain coins since he would still need to sign transactions with a private key, which is cryptographically difficult. At worst, an attacker who is approved to trade could send tokens to another address, effectively burning the token.
+
+Because of its tunability, we can explore the options for much smaller storage. For instance with _`m = 2^24`_ bits and _`k = 12`_, one could store up to 1,000,000 addresses with only a small (~1e-6) probability of collision. This opens up the possibility of storing millions of addresses, allowing ownership stakes and trades to be executed a much larger number of addresses than previously allowed with on-chain whitelists.
+
+
+
 
 
 
