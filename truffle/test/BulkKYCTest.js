@@ -1,7 +1,8 @@
 const NamelessKYC = artifacts.require('./NamelessKYC.sol')
-const { bloomStateFor, bloomFn, displayBloomState } = require('../utils/bloom')
+const { bloomStateFor, bloomFn, displayBloomState, bitPositions } = require('../utils/bloom')
 
-const NumAddrs = 10
+const NumAddrs = 100
+const GroupSize = 50
 
 const Chars = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 'a', 'b', 'c', 'd', 'e', 'f']
 
@@ -37,7 +38,17 @@ contract('NamelessKYC - Bulk KYC', () => {
 
   it('should successfully add all addresses', async () => {
     const contract = await NamelessKYC.deployed()
-    await Promise.all(kycedAddrs.map((addr) => contract.add(addr)))
+
+    for (let i = 0; i < (NumAddrs / GroupSize); i++) {
+      let positions = []
+      kycedAddrs.slice(i * GroupSize, (i + 1) * GroupSize).forEach((addr) => {
+        bitPositions(addr).forEach((pos) => {
+          positions.push('0x' + pos.toString(16))
+        })
+      })
+
+      await contract.madd(positions)
+    }
   })
 
   it('should have true positives', async () => {
