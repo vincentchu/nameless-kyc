@@ -61,6 +61,12 @@ const bitPosition = (hash) => {
   return num.and(BitMask)
 }
 
+const bitPositions = (addr) => {
+  const hashes = addressHashes(addr)
+
+  return hashes.map(bitPosition)
+}
+
 
 
 
@@ -72,4 +78,5 @@ module.exports = {
 
   addressHashes,
   bitPosition,
+  bitPositions,
 }

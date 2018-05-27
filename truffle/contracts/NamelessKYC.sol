@@ -24,6 +24,16 @@ contract NamelessKYC {
         return pos;
     }
 
+    function bitPositions(address addr) public view returns (uint32[4] positions) {
+        bytes32[4] memory hashes = addressHashes(addr);
+
+        for (uint8 k = 0; k < 4; k++) {
+            positions[k] = bitPosition(hashes[k]);
+        }
+
+        return positions;
+    }
+
 
 
     // uint32 private M = 32;

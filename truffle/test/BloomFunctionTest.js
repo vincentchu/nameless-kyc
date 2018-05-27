@@ -1,7 +1,9 @@
 const NamelessKYC = artifacts.require('./NamelessKYC.sol')
-const { addressHashes, keccak256, bitPosition } = require('../utils/bloom')
+const { addressHashes, keccak256, bitPosition, bitPositions } = require('../utils/bloom')
 
 const Address = '0x4e4e5b3585d8ed9a3954389b85574800260a04cf'
+
+const toHex = (n) => n.toString(16)
 
 contract('NamelessKYC - Bloom functions', () => {
   it('should properly hash', async () => {
@@ -11,11 +13,18 @@ contract('NamelessKYC - Bloom functions', () => {
     assert.deepEqual(hashes, addressHashes(Address))
   })
 
-  it('should properly compute bitposition', async () => {
+  it('should properly compute bit position', async () => {
     const someHash = keccak256('hello')
     const contract = await NamelessKYC.deployed()
     const bitPos = await contract.bitPosition(someHash)
 
     assert.deepEqual(bitPos.toString(16), bitPosition(someHash).toString(16))
+  })
+
+  it('should properly compute bit positions for an address', async () => {
+    const contract = await NamelessKYC.deployed()
+    const bitIdxs = await contract.bitPositions(Address)
+
+    assert.deepEqual(bitIdxs.map(toHex), bitPositions(Address).map(toHex))
   })
 })
